@@ -6,16 +6,16 @@ public:
             for(int j=0;j<rsize;j++){
                 if(g[i][j]==1){
                     // temp=0;
-                    if(i==0 || g[i-1][j]==0){
+                    if(i==0 || !g[i-1][j]){
                         pVal++;
                     }
-                    if(j==rsize-1 || g[i][j+1]==0){
+                    if(j==rsize-1 || !g[i][j+1]){
                         pVal++;
                     }
-                    if(i==csize-1 || g[i+1][j]==0){
+                    if(i==csize-1 || !g[i+1][j]){
                         pVal++;
                     }
-                    if(j==0 || g[i][j-1]==0){
+                    if(j==0 || !g[i][j-1]){
                         pVal++;
                     }    
                 }
