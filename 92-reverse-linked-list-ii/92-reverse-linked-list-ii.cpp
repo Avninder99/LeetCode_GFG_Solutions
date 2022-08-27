@@ -20,7 +20,7 @@ public:
         }
         nEnd = prev;
         
-        for(int i=0;i<right-left;i++){
+        for(int i=left;i<right;i++){
             temp = curr->next;
             curr->next = prev;
             prev = curr;
