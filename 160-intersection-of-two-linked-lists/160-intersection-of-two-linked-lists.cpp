@@ -38,5 +38,13 @@ public:
             curr2 = curr2->next;
         }
         return NULL;
+        
+        // below code has been taken from submissions after successful submission of above code
+        // ListNode *a = headA, *b = headB;
+        // while (a != b) {
+        //     a = !a ? headB : a->next;
+        //     b = !b ? headA : b->next;
+        // }
+        // return a;
     }
 };
