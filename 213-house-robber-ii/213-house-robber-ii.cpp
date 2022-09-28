@@ -15,9 +15,9 @@ public:
     int rob(vector<int>& n) {
         int size = n.size();
         if(size == 1) return n[0];
+        if(size == 2) return max(n[0], n[1]);
         vector<int>v1(size,-1), dp;
         dp = v1;
-        // int f = n[size-1]+func(n, dp, size-3, true);
         dp[0] = n[0], dp[1] = n[1];
         for(int i=2;i<size;i++){
             int t,nt;
@@ -27,8 +27,17 @@ public:
             dp[i] = max(t,nt);
         }
         int f = max(dp[size-1], dp[size-2]);
+        
         dp = v1;
-        int s = func(n, dp, size-2, false);
+        dp[0] = n[0], dp[1] = n[1];
+        for(int i=1;i<size-1;i++){
+            int t,nt;
+            t = n[i];
+            if(i>1) t += dp[i-2];
+            nt = dp[i-1];
+            dp[i] = max(t,nt);
+        }
+        int s = max(dp[size-2], dp[size-3]);
         return max(f, s);
     }
 };
