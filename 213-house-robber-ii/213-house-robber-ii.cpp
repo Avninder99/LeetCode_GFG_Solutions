@@ -17,7 +17,16 @@ public:
         if(size == 1) return n[0];
         vector<int>v1(size,-1), dp;
         dp = v1;
-        int f = n[size-1]+func(n, dp, size-3, true);
+        // int f = n[size-1]+func(n, dp, size-3, true);
+        dp[0] = n[0], dp[1] = n[1];
+        for(int i=2;i<size;i++){
+            int t,nt;
+            t = n[i];
+            if(i>2) t += dp[i-2];
+            nt = dp[i-1];
+            dp[i] = max(t,nt);
+        }
+        int f = max(dp[size-1], dp[size-2]);
         dp = v1;
         int s = func(n, dp, size-2, false);
         return max(f, s);
