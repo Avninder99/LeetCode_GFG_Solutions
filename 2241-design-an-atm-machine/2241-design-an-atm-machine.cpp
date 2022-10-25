@@ -7,7 +7,7 @@ public:
     vector<int> withdraw(int amount) {
         vector<int> take(5);
         for (int i=4;i>=0;--i){
-            take[i] = min(bank[i], amount / val[i]);
+            take[i] = min(bank[i], amount/val[i]);
             amount -= take[i] * val[i];
         }
         if(amount) return { -1 };
