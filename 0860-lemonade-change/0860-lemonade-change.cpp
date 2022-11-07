@@ -2,8 +2,9 @@ class Solution {
 public:
     bool lemonadeChange(vector<int>& b) {
         int t;
-        unordered_map<int,int>m1;
-        m1[5] = 0, m1[10] = 0, m1[20] = 0;
+        vector<int>m1(21,0);
+        // unordered_map<int,int>m1;
+        // m1[5] = 0, m1[10] = 0, m1[20] = 0;
         for(int i=0;i<b.size();i++){
             m1[b[i]]++;
             if(b[i] == 5) continue;
