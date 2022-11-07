@@ -1,1 +1,1 @@
-​
+tried division instead of string processing
