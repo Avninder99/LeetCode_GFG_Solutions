@@ -1,6 +1,5 @@
 class Solution {
 public:
-    
     int numSquares(int tar) {
         unordered_set<int>s1;
         for(int i=0;i<101;i++){
