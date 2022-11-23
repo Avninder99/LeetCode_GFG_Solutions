@@ -1,28 +1,35 @@
 class Solution {
 public:
-    int numSquares(int tar) {
-        unordered_set<int>s1;
-        for(int i=0;i<101;i++){
-            s1.insert(i*i);
+    int solve(int n, vector<int>&sq, vector<int> &dp) {
+        if(n == 0){
+            return 0;
         }
         
-        for(auto itr: s1){
-            if(tar == itr){
-                return 1;
-            }
-        }
+        if (dp[n] != -1)
+            return dp[n];
         
-        for(auto itr: s1){
-            if(s1.count(tar-itr)){
-                return 2;
-            }
-        } 
+        int ans = INT_MAX; 
+        
+        for(int i = 0; i < sq.size(); i++) {
+            if (sq[i] > n)
+                break;
             
-        while(tar % 4 == 0){
-            tar /= 4;
+            ans = min(ans, 1 + solve(n - sq[i], sq, dp));
         }
-        if(tar % 8 != 7) return 3;
         
-        return 4;
+        return dp[n] = ans;
+        
+    }
+    int numSquares(int n) {
+        vector<int>sq;
+        vector<int> dp(n + 1, -1);
+        int i = 1;
+        while(i*i <= n){
+            sq.push_back(i*i);
+            i++;
+        }
+        
+        return solve(n, sq, dp);
+        
     }
 };
