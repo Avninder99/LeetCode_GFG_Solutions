@@ -50,23 +50,7 @@ public:
     int getRandom() {
         srand(seed);
         seed += 10;
-        int r = rand()%rec.size();
-        int lVal = rec[rec.size() - 1], rVal = rec[r];
-        
-        if(lVal == rVal){
-            return rVal;
-        }
-        
-        m1[lVal].erase(rec.size() - 1);
-        m1[rVal].erase(r);
-        
-        m1[lVal].insert(r);
-        m1[rVal].insert(rec.size() - 1);
-        
-        rec[r] = lVal;
-        rec[rec.size() - 1] = rVal;
-        
-        return rVal;
+        return rec[rand()%rec.size()];
     }
 };
 
