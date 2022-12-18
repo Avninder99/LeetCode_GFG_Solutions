@@ -1,0 +1,1 @@
+the approach is same as find next greater element from array question
