@@ -1,23 +1,19 @@
 class Solution {
 public:
-    void func(vector<vector<int>>&g, int ptr, int &n, vector<int>t, vector<vector<int>>&res){
-        if(ptr == n-1){
-            res.push_back(t);
-            return;
+    void dfs(int node, vector<vector<int>>&g, vector<int>rec, vector<vector<int>>&res){
+        rec.push_back(node);
+        if(node == g.size() - 1){
+            res.push_back(rec);
         }
-        for(int i=0;i<g[ptr].size();i++){
-            t.push_back(g[ptr][i]);
-            func(g, g[ptr][i], n, t, res);
-            t.pop_back();
+        for(auto itr: g[node]){
+            dfs(itr, g, rec, res);
         }
         return;
     }
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& g) {
         vector<vector<int>>res;
-        vector<int>t;
-        t.push_back(0);
-        int s = g.size();
-        func(g, 0, s, t, res);
+        vector<int>rec;
+        dfs(0, g, rec, res);
         return res;
     }
 };
