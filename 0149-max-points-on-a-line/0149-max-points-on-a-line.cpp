@@ -1,47 +1,57 @@
 class Solution {
 public:
-    int maxPoints(vector<vector<int>>& points) {
-        if(points.size()<=2) return points.size(); // only two points are always on the same line, beacuse using 2 points
-                                                    // line is made
-        int res = 0;
-        for(int i = 0; i < points.size(); i++)
-        {
-            unordered_map<double, int> mp;
-            int duplicate = 0;
-            double slope = 0.0;
-            for(int j = 0; j < points.size(); j++)
-            {
-                int x1 = points[i][0];
-                int x2 = points[j][0];
-                int y1 = points[i][1];
-                int y2 = points[j][1];    
-                
-                // slope = dy/dx.
-                int dy = y2 - y1;
-                int dx = x2 - x1;
-                if(dy == 0 && dx == 0){  // same overlapping point --> consider 2 same point as single point
-                    duplicate++; 
-                    continue;
+    int maxPoints(vector<vector<int>>& p) {
+        int size = p.size();
+        if(size <= 2) return size;
+        unordered_map<double,int> m1;
+        int ans = 0;
+        double s;
+        for(auto itr : p){
+            m1.clear();
+            int x1 = itr[0], y1 = itr[1], x2, y2;
+            for(auto itr2 : p){   
+                if(itr == itr2) continue;
+                x2 = itr2[0], y2 = itr2[1];
+                if(x2 == x1){
+                    s = INT_MAX;
+                }else{
+                    s = (double)(y2 - y1)/(x2 - x1);   
                 }
-                
-                if(dx != 0)
-                    slope = dy*1.0/dx; // store in double
-                else // dx==0 means slope is infinity
-                    slope = INT_MAX;
-                
-                mp[slope]++;
-            }
-
-            if(mp.size() == 0)
-                res = duplicate;
-            else
-            {
-                for(auto slope : mp){
-                    
-                    res = max(res, slope.second + duplicate);
-                }
+                m1[s]++;
+                ans = max(ans, m1[s]);
             }
         }
-        return res;
+        return ans+1;
     }
+        
+        // second approach
+//         map<pair<double, double>, set<int>>m1;
+//         for(int i=0;i<p.size();i++){
+//             for(int j=0;j<p.size();j++){
+//                 if(i != j){
+                    
+//                     if(p[i][0] != p[j][0]){
+//                         double m = (double)(p[j][1] - p[i][1]) / (p[j][0] - p[i][0]);
+//                         double c = -1 * (m * p[j][0]);
+//                         m1[make_pair(m, c)].insert(i);
+//                         m1[make_pair(m, c)].insert(j);
+//                     }else{
+                        
+//                         m1[make_pair(INT_MAX, p[j][0])].insert(i);
+//                         m1[make_pair(INT_MAX, p[j][0])].insert(j);
+//                     }
+                    
+                    
+//                 }
+//             }
+            
+//         }
+//         int res = 2;
+//         for(auto itr = m1.begin(); itr != m1.end(); itr++){
+//             if(itr->second.size() > res){
+//                 res = itr->second.size();
+//             }
+//         }
+//         return res;
+    
 };
