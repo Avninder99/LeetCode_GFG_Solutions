@@ -6,32 +6,31 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in a directed graph.
-    bool dfs(int curr, vector<int>adj[], vector<int>&rec, int &col){     // return's true if cyclic
-        rec[curr] = col;
-        for(int itr: adj[curr]){
-            if(rec[itr] == -9) continue;
-            else if(rec[itr] == -1){
-                if(dfs(itr, adj, rec, col)){
-                    return true;
-                }
-            }else if(rec[itr] == col){
-                return true;
-            }
-        }
-        rec[curr] = -9;  // our marks that the node and further nodes are safe
-        return false;
-    }
     bool isCyclic(int V, vector<int> adj[]) {
         // code here
-        vector<int>rec(V, -1);
-        for(int i=0;i<V;i++){
-            if(rec[i] == -1){
-                if(dfs(i, adj, rec, i)){
-                    return true;
-                }
-            }
-        }
-        return false;
+        vector<int>indRec(V), res;
+	    queue<int>q1;
+	    for(int i=0;i<V;i++){
+	        for(auto itr: adj[i]){
+	            indRec[itr]++;
+	        }
+	    }
+	    for(int i=0;i<V;i++){
+	        if(indRec[i] == 0){
+	            q1.push(i);
+	        }
+	    }
+	    while(!q1.empty()){
+	        int holder = q1.front();
+	        q1.pop();
+	        for(auto itr: adj[holder]){
+	            if(--indRec[itr] == 0){
+	                q1.push(itr);
+	            }
+	        }
+	        res.push_back(holder);
+	    }
+	    return res.size() < V;
     }
 };
 
