@@ -10,46 +10,58 @@ using namespace std;
 
 class Solution {
   public:
-    bool checker(int curr, vector<int>&rec, vector<int>&res, vector<int>adj[], int &col){
-        // no loop - true
-        // loop - false
-        rec[curr] = col;
-        bool safe = true;
-        for(int itr: adj[curr]){
-            if(rec[itr] == -9) continue;
-            else if(rec[itr] == -10 || rec[itr] == col){
-                safe = false;
-            }
-            else if(rec[itr] == -1){
-                if(!checker(itr, rec, res, adj, col)){
-                    safe = false;
-                }
-            }
-        }
-        if(safe){
-            res.push_back(curr);
-            rec[curr] = -9;
-        }else{
-            rec[curr] = -10;
-        }
-        return safe;
-    }
-    vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
+    vector<int> eventualSafeNodes(int V, vector<int> oadj[]) {
         // code here
-        // -1 -> not visited
-        // -9 -> visited and does not lead to a loop neither is a part of it
-        // -10 -> leads to or is a part of a loop
-        // 0 - v -> temp markers
+        // second approach using kahn's algorithms
         
-        // at last i have to return the nodes that are marked with -9 (stored in res)
-        vector<int>rec(V, -1), res;
+        // reversed all the edges
+        vector<vector<int>>adj(V);
         for(int i=0;i<V;i++){
-            if(rec[i] == -1){
-                checker(i, rec, res, adj, i);
+            for(auto itr: oadj[i]){
+                adj[itr].push_back(i);
             }
         }
-        sort(res.begin(), res.end());
-        return res;
+        
+        // use kahn's algo starting from all the nodes with indegree 0
+        // (these nodes were terminal nodes in the begining)
+        
+        vector<int>indRec(V), res;
+	    queue<int>q1;
+	    
+	    for(int i=0;i<V;i++){
+	        for(auto itr: adj[i]){
+	            indRec[itr]++;
+	        }
+	    }
+	    
+	    for(int i=0;i<V;i++){
+	        if(indRec[i] == 0){
+	            q1.push(i);
+	        }
+	    }
+	    
+	    while(!q1.empty()){
+	        int holder = q1.front();
+	        q1.pop();
+	        for(auto itr: adj[holder]){
+	            if(--indRec[itr] == 0){
+	                q1.push(itr);
+	            }
+	        }
+	        res.push_back(holder);
+	    }
+	    
+	    // what is happening is thst kahn's algo pushes all the nodes from out zero indegree nodes
+	    // whose indegree can be convertexd to zero
+	    // what that means is the in original graph all edges from these nodes somehow leads to the terminal node
+	    // without a loop inbetween
+	    
+	    // this is happening because kahn's algo remove all the edges from these nodes by reaching them from
+	    // zero indegree nodes and these nodes become part of res when there indegree became zero
+	    
+	    sort(res.begin(), res.end());
+	    return res;
+        
     }
 };
 
