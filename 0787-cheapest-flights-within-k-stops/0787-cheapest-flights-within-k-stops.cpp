@@ -1,33 +1,44 @@
 class Solution {
-public:
-    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        vector<vector<pair<int, int>>> adj(n);
-        for(auto flight : flights){
-            // flight[0] represent node i, flight[1] represent neighbor node of node i, flight[2] represent cost between node i to neighbor node
-            adj[flight[0]].push_back({flight[1], flight[2]});
+  public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K)  {
+        vector<vector<pair<int, int>>>adj(n);   // from -> { {to, stopNum}, ... }
+        vector<int>records(n, 1e7);  // cost till now
+        
+        for(auto itr: flights){
+            adj[itr[0]].push_back({itr[1], itr[2]});
         }
-        //it will store [node, cost]
-        queue<pair<int, int>> q;
-        q.push({src, 0});
-        //it will store minimum cost to reach each node
-        vector<int> minCost(n, INT_MAX);
-        int stops = 0;
-        while(!q.empty() && stops <= k){
-            int size = q.size();
-            while (size--) {
-                auto [currNode, cost] = q.front();
-                q.pop();
-                for (auto& [neighbour, price] : adj[currNode]) {
-                    if (price + cost < minCost[neighbour]){
-                        minCost[neighbour] = price + cost;
-                        q.push({neighbour, minCost[neighbour]});
-                    }
+        
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>>pq;   // {stopNum, cost, node}
+        
+        pq.push({0, 0, src});
+        
+        while(!pq.empty()){
+            vector<int>holder = pq.top();
+            pq.pop();
+            
+            if(holder[0] > K + 1){
+                return -1;
+            }
+            
+            if(holder[0] == K + 1){
+                if(holder[2] == dst){
+                    records[dst] = min(records[dst], holder[1]);
+                }
+                continue;
+                // why i am not returning -1 if not dst ?
+                // because many entries in pq may have holder[0] == k+1 from 
+                // which anyone could contain destination node
+                // so we need to check them all after it the first if condition can hold the overflow
+            }
+            
+            for(auto itr: adj[holder[2]]){
+                int newCost = holder[1] + itr.second;
+                if(records[itr.first] > newCost){
+                    records[itr.first] = newCost;
+                    pq.push({holder[0] + 1, newCost, itr.first});
                 }
             }
-            stops++;
         }
-        if(minCost[dst] == INT_MAX)
-            return -1;
-        return minCost[dst];
+        return records[dst] == 1e7 ? -1 : records[dst];
     }
 };
