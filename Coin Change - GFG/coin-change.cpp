@@ -9,22 +9,22 @@ class Solution {
 
         // code here.
         vector<vector<long long int>>dp(sum + 1, vector<long long int>(N + 1, -1));
-        return func(coins, N - 1, sum, dp);
+        return func(coins, N, sum, dp);
     }
     long long int func(int coins[], int index, int lsum, vector<vector<long long int>>&dp){
         if(lsum == 0){
             return 1;
         }
         
-        if(index < 0){
+        if(index == 0){
             return 0;
         }
         
         if(dp[lsum][index] == -1){
             long long int p = 0, np = 0;
             
-            if(coins[index] <= lsum){
-                p = func(coins, index, lsum - coins[index], dp);
+            if(coins[index - 1] <= lsum){
+                p = func(coins, index, lsum - coins[index - 1], dp);
             }
             np = func(coins, index - 1, lsum, dp);
             
