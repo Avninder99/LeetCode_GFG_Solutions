@@ -16,7 +16,6 @@ public:
             if(v.count(s[++r])){
                 count++;
             }
-            cout << l << " " << r << endl;
             maxi = max(maxi, count);
         }
         return maxi;
