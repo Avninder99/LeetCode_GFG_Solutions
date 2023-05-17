@@ -11,32 +11,32 @@
 class Solution {
 public:
     int pairSum(ListNode* head) {
-        ListNode *curr = NULL, *prev = NULL, *endp = NULL, *sp = head, *fp = head->next, *temp = NULL;
-        int counter = 0;
-        while(fp != NULL && fp->next != NULL){
-            counter++;
-            sp = sp->next;
-            fp = fp->next->next;
-        }
-        curr = sp->next;
-        prev = sp;
+        ListNode *sptr = head, *fptr = head->next, *prev = NULL, *t, *tail;
         
-        while(curr){
-            temp = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = temp;
+        while(fptr && fptr->next){
+            sptr = sptr->next;
+            fptr = fptr->next->next;
         }
-        endp = prev;
-        int maxSum=0, temp1;
+        prev = sptr;
+        sptr = sptr->next;
+        while(sptr){
+            t = sptr->next;
+            sptr->next = prev;
+            prev = sptr;
+            sptr = t;
+        }
+        tail = prev;
         
-        while(true){
-            temp1 = head->val + endp->val;
-            if(temp1 > maxSum) maxSum = temp1;
-            if(head->next == endp) break;
+        int maxi = 0;
+        while(head){
+            maxi = max(maxi, head->val + tail->val);
+            if(head->next == tail){
+                break;
+            }
             head = head->next;
-            endp = endp->next;
+            tail = tail->next;
         }
-        return maxSum;
+        
+        return maxi;
     }
 };
