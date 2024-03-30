@@ -1,26 +1,15 @@
 class Solution {
 public:
     int numSubarraysWithSum(vector<int>& nums, int goal) {
-        int size = nums.size(), zcount = 0, res = 0;
+        int size = nums.size(), lzcount = 0, rzcount = 0, res = 0;
         vector<int> lcount(size, 0), rcount(size, 0);
         
         for(int i=0;i<size;i++) {
-            lcount[i] = zcount;
-            if(nums[i] == 0) {
-                zcount++;
-            } else {
-                zcount = 0;
-            }
-        }
-        
-        zcount = 0;
-        for(int i=size-1;i>=0;i--) {
-            rcount[i] = zcount;
-            if(nums[i] == 0) {
-                zcount++;
-            } else {
-                zcount = 0;
-            }
+            lcount[i] = lzcount;
+            lzcount = (nums[i] == 0) ? (lzcount + 1) : 0;
+
+            rcount[size-1-i] = rzcount;
+            rzcount = (nums[size - 1 - i] == 0) ? (rzcount + 1) : 0;
         }
         
         // handles goal == 0 cases
@@ -42,9 +31,8 @@ public:
                 break;
             }
         }
-        if(!nums[lptr]) {
-            return 0;
-        }
+        
+        if(!nums[lptr]) return 0;
         
         while(rptr < size) {
             sum += nums[rptr];
